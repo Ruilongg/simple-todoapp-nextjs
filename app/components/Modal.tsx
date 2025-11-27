@@ -1,24 +1,31 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+
 interface ModalProps {
-    modalOpen: boolean;
-    setModalOpen: (open: boolean) => boolean | void;
-    children: React.ReactNode;
-  }
-  
-  const Modal: React.FC<ModalProps> = ({ modalOpen, setModalOpen, children }) => {
-    return (
-      <div className={`modal ${modalOpen ? "modal-open" : ""}`}>
-        <div className='modal-box relative'>
-          <label
-            onClick={() => setModalOpen(false)}
-            className='btn btn-sm btn-circle absolute right-2 top-2'
-          >
-            ✕
-          </label>
-          {children}
-        </div>
-      </div>
-    );
-  };
-  
-  export default Modal;
-  
+  modalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
+  children: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ modalOpen, setModalOpen, children }) => {
+  return (
+    <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle />
+          <DialogDescription />
+        </DialogHeader>
+        {children}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default Modal;

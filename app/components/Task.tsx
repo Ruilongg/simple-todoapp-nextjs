@@ -7,14 +7,24 @@ import Modal from "./Modal";
 import { useRouter } from "next/navigation";
 import { deleteTodo, editTodo } from "@/api";
 
+// shadcn/ui components
+import { TableRow, TableCell } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 interface TaskProps {
   task: ITask;
 }
 
 const Task: React.FC<TaskProps> = ({ task }) => {
   const router = useRouter();
-  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
-  const [openModalDeleted, setOpenModalDeleted] = useState<boolean>(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [openModalDeleted, setOpenModalDeleted] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState<string>(task.text);
 
   const handleSubmitEditTodo: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -34,50 +44,67 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   };
 
   return (
-    <tr key={task.id}>
-      <td className='w-full'>{task.text}</td>
-      <td className='flex gap-5'>
-        <FiEdit
+    <TableRow key={task.id}>
+      {/* Task Text */}
+      <TableCell className="w-full">{task.text}</TableCell>
+
+      {/* Action Buttons */}
+      <TableCell className="flex justify-end gap-4">
+        {/* Edit Icon */}
+        <Button
+          variant="ghost"
           onClick={() => setOpenModalEdit(true)}
-          cursor='pointer'
-          className='text-blue-500'
-          size={25}
-        />
+          className="p-0 text-blue-500 hover:bg-blue-50"
+        >
+          <FiEdit size={22} />
+        </Button>
+
+        {/* Edit Modal */}
         <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
-          <form onSubmit={handleSubmitEditTodo}>
-            <h3 className='font-bold text-lg'>Edit task</h3>
-            <div className='modal-action'>
-              <input
-                value={taskToEdit}
-                onChange={(e) => setTaskToEdit(e.target.value)}
-                type='text'
-                placeholder='Type here'
-                className='input input-bordered w-full'
-              />
-              <button type='submit' className='btn'>
-                Submit
-              </button>
-            </div>
+          <form onSubmit={handleSubmitEditTodo} className="space-y-4">
+            <DialogHeader>
+              <DialogTitle>Edit Task</DialogTitle>
+            </DialogHeader>
+
+            <Input
+              value={taskToEdit}
+              onChange={(e) => setTaskToEdit(e.target.value)}
+              placeholder="Edit task..."
+            />
+
+            <DialogFooter>
+              <Button type="submit">Save</Button>
+            </DialogFooter>
           </form>
         </Modal>
-        <FiTrash2
+
+        {/* Delete Icon */}
+        <Button
+          variant="ghost"
           onClick={() => setOpenModalDeleted(true)}
-          cursor='pointer'
-          className='text-red-500'
-          size={25}
-        />
+          className="p-0 text-red-500 hover:bg-red-50"
+        >
+          <FiTrash2 size={22} />
+        </Button>
+
+        {/* Delete Modal */}
         <Modal modalOpen={openModalDeleted} setModalOpen={setOpenModalDeleted}>
-          <h3 className='text-lg'>
-            Are you sure, you want to delete this task?
-          </h3>
-          <div className='modal-action'>
-            <button onClick={() => handleDeleteTask(task.id)} className='btn'>
-              Yes
-            </button>
-          </div>
+          <DialogHeader>
+            <DialogTitle>Delete Task</DialogTitle>
+          </DialogHeader>
+
+          <p className="py-2 text-sm">
+            Are you sure you want to delete this task?
+          </p>
+
+          <DialogFooter>
+            <Button variant="destructive" onClick={() => handleDeleteTask(task.id)}>
+              Yes, delete
+            </Button>
+          </DialogFooter>
         </Modal>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 

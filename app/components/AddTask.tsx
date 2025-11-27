@@ -7,10 +7,19 @@ import { addTodo } from "@/api";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
+// shadcn components
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 const AddTask = () => {
   const router = useRouter();
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [newTaskValue, setNewTaskValue] = useState<string>("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [newTaskValue, setNewTaskValue] = useState("");
 
   const handleSubmitNewTodo: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -25,28 +34,30 @@ const AddTask = () => {
 
   return (
     <div>
-      <button
+      {/* Replace DaisyUI button with ShadCN Button */}
+      <Button
         onClick={() => setModalOpen(true)}
-        className='btn btn-primary w-full'
+        className="w-full flex items-center justify-center gap-2"
       >
-        Add new task <AiOutlinePlus className='ml-2' size={18} />
-      </button>
+        Add new task <AiOutlinePlus size={18} />
+      </Button>
 
+      {/* Modal (ShadCN Dialog) */}
       <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}>
-        <form onSubmit={handleSubmitNewTodo}>
-          <h3 className='font-bold text-lg'>Add new task</h3>
-          <div className='modal-action'>
-            <input
-              value={newTaskValue}
-              onChange={(e) => setNewTaskValue(e.target.value)}
-              type='text'
-              placeholder='Type here'
-              className='input input-bordered w-full'
-            />
-            <button type='submit' className='btn'>
-              Submit
-            </button>
-          </div>
+        <form onSubmit={handleSubmitNewTodo} className="space-y-4">
+          <DialogHeader>
+            <DialogTitle>Add new task</DialogTitle>
+          </DialogHeader>
+
+          <Input
+            value={newTaskValue}
+            onChange={(e) => setNewTaskValue(e.target.value)}
+            placeholder="Type here..."
+          />
+
+          <DialogFooter>
+            <Button type="submit">Submit</Button>
+          </DialogFooter>
         </form>
       </Modal>
     </div>

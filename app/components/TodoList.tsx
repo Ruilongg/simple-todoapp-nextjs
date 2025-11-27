@@ -1,6 +1,14 @@
 import { ITask } from "@/types/tasks";
-import React from "react";
 import Task from "./Task";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface TodoListProps {
   tasks: ITask[];
@@ -8,21 +16,21 @@ interface TodoListProps {
 
 const TodoList: React.FC<TodoListProps> = ({ tasks }) => {
   return (
-    <div className='overflow-x-auto'>
-      <table className='table w-full'>
-        {/* head */}
-        <thead>
-          <tr>
-            <th>Tasks</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="w-full overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-3/4">Tasks</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
           {tasks.map((task) => (
             <Task key={task.id} task={task} />
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };
